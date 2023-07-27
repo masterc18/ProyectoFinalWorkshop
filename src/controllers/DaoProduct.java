@@ -83,7 +83,26 @@ public class DaoProduct {
         } catch (SQLException e) {
             System.out.println("Error al buscar el registro por el id: " + id + "El error fue: " + e.getMessage());
         }
+    }
 
+    public DefaultTableModel getProductByName(String name) {
+        DefaultTableModel tbl = new DefaultTableModel();
+        ResultSet rs = null;
+        String titulos[] = {"CODIGO", "Categoria"};
+        tbl.setColumnIdentifiers(titulos);
+        try {
+            selectProductByName.setString(1, name);
+            rs = selectProductByName.executeQuery();
+            while (rs.next()) {
+                Object datos[] = new Object[2];
+                datos[0] = rs.getInt("IDProduct");
+                datos[1] = rs.getString("NameProduct");
+                tbl.addRow(datos);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar el registro por nombre: " + name + "El error fue: " + e.getMessage());
+        }
+        return tbl;
     }
 
     public int getLastProduct() {
@@ -99,6 +118,48 @@ public class DaoProduct {
         }
         return id + 1;
 
+    }
+
+    public int addProduct(String nameProduct) {
+        int result = 0;
+        try {
+            insterProduct.setString(1, nameProduct);
+            result = insterProduct.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al insertar el producto: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public int updateProduct(String nameProduct, int idProduct) {
+        int result = 0;
+        try {
+            updateProduct.setString(1, nameProduct);
+            updateProduct.setInt(2, idProduct);
+            result = updateProduct.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar el producto: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public int deleteProduct(int idProduct) {
+        int result = 0;
+        try {
+            deleteProduct.setInt(1, idProduct);
+            result = deleteProduct.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar el producto: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public ArrayList<Product> getListProduct() {
+        return listProducts;
+    }
+
+    public void setListProduct(ArrayList<Product> listProduct) {
+        this.listProducts = listProduct;
     }
 
 }
