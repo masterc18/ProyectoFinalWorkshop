@@ -60,10 +60,45 @@ public class DaoProduct {
             rs = selectAllProduct.executeQuery();
 
             while (rs.next()) {
-                listProducts.add(new Product();
+                listProducts.add(new Product(rs.getInt("IDProduct"),
+                        rs.getString("NameProduct")));
             }
 
         } catch (SQLException e) {
+            System.out.println("Error al obtener las categorias");
         }
     }
+
+    public void getProductByID(int id) {
+        ResultSet rs = null;
+
+        listProducts = new ArrayList<>();
+        try {
+            selectProductById.setInt(1, id);
+            rs = selectProductById.executeQuery();
+            while (rs.next()) {
+                listProducts.add(new Product(rs.getInt("IDProduct"),
+                        rs.getString("NameProduct")));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar el registro por el id: " + id + "El error fue: " + e.getMessage());
+        }
+
+    }
+
+    public int getLastProduct() {
+        int id = 0;
+        ResultSet rs = null;
+        try {
+            rs = selectLastProduct.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("IDProduct");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el ultimo id: " + e.getMessage());
+        }
+        return id + 1;
+
+    }
+
 }
